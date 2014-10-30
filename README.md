@@ -1,10 +1,10 @@
-Ubuntu precise build of PostGIS 2.2svn
-======================================
+Ubuntu trusty build of PostGIS 2.1.x with added GML curve support
+=================================================================
 
 	docker build -t build-postgis .
 
 	#Copy resulting deb files to /tmp
-	docker run -v /tmp:/pkg build-postgis sh -c 'cp /root/*postgis*.deb /pkg'
+	docker run -v /tmp:/pkg build-postgis sh -c 'cp /root/postgis-deb/*.deb /pkg'
 
 
 Interactive shell

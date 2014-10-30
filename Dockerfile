@@ -1,57 +1,36 @@
-# Ubuntu precise build of PostGIS 2.2svn
-#
-# sudo docker build -t="builder-precise" .
+# Ubuntu trusty build of PostGIS 2.1.x with added GML curve support
 
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 
 MAINTAINER Pirmin Kalberer version: 0.1.5
 
 WORKDIR /root
 CMD /bin/bash
 
-RUN apt-get -y update
+# Packages for add-apt-repository
+RUN apt-get update && apt-get install -y python-software-properties software-properties-common
 
 #Ubuntugis PPA
-RUN apt-get install -y python-software-properties
-RUN add-apt-repository ppa:ubuntugis/ppa
-RUN apt-get update
+#RUN add-apt-repository ppa:ubuntugis/ppa
 
 #PostGIS build dependencies
-
-#RUN apt-get build-dep postgis
-#The following packages have unmet dependencies:
-# libgdal-dev : Depends: libpq-dev but it is not going to be installed
-# postgresql-server-dev-9.1 : Depends: libpq-dev (>= 9.1~) but it is not going to be installed
-
-#libssl headers from source tgz
-#ADD http://www.openssl.org/source/openssl-1.0.1g.tar.gz /root/
-#RUN cd /root && tar xzf openssl-1.0.1g.tar.gz && mv openssl-1.0.1g/include/openssl /usr/local/include/
-
-#libssl-dev dummy package
-RUN apt-get install -y equivs
-ADD libssl-dev /root/
-RUN equivs-build libssl-dev
-RUN dpkg -i /root/libssl-dev-dummy_1.0.1_all.deb
-
 RUN apt-get build-dep -y postgis
 
 #Additional build dependencies
-RUN apt-get install -y automake libtool devscripts
-
-RUN apt-get install -y subversion
-
-#PostGIS source checkout
-RUN svn checkout http://svn.osgeo.org/postgis/trunk/ /root/postgis-svn
+RUN apt-get install -y devscripts
 
 #Debian packages sources
-RUN mkdir /root/postgis-deb; cd /root/postgis-deb && apt-get source postgis
+WORKDIR /root/postgis-deb
+RUN apt-get source postgis
+
+#Add patch
+COPY gml-curves /root/postgis-deb/
+RUN cd postgis-2.1* && mv ../gml-curves debian/patches/
+RUN cd postgis-2.1* && echo gml-curves >>debian/patches/series
+RUN cd postgis-2.1* && dch -v 2.1.x+gmlcurves "Build for Trusty with gml curve support patches"
 
 #Build packages
-WORKDIR /root/postgis-svn
-RUN sh autogen.sh; ./configure
-RUN cp -r ../postgis-deb/postgis-2.0.1/debian .; mv debian/patches debian/patches-deb
-RUN dch -v 2.2.0pre-r$(svn info | grep Revision: | awk '{print $2}')~precise1 "Build for Precise of upstream 2.2.0 SVN prerelase (unpatched)"
-RUN dpkg-buildpackage -b -uc -us
+#Build without tests. They need running PG server.
+RUN cd postgis-2.1* && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -b -uc -us
 
-WORKDIR /root
 VOLUME ["/pkg"]
