@@ -1,5 +1,15 @@
-Ubuntu trusty build of PostGIS 2.1.x with added GML curve support
+Ubuntu trusty build of PostGIS 2.2.x with ST_CurveToLine backport
 =================================================================
+
+ST_CurveToLine
+--------------
+
+Create patch from https://github.com/strk/postgis/tree/svn-2.2-curve-to-line-extended:
+
+	git diff 512a1d1 >curve-to-line-backport.patch
+
+Usage
+-----
 
 	docker build -t build-postgis .
 
@@ -10,7 +20,7 @@ Ubuntu trusty build of PostGIS 2.1.x with added GML curve support
 Interactive shell
 -----------------
 
-	docker run -t -i build-postgis /bin/bash
+	docker run -t -i build-postgis
 
 	cd postgis-svn
 
