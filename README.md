@@ -16,6 +16,9 @@ Usage
 	#Copy resulting deb files to /tmp
 	docker run -v /tmp:/pkg build-postgis sh -c 'cp /root/postgis-deb/*.deb /pkg'
 
+After installation update postgis with:
+
+	ALTER EXTENSION postgis UPDATE TO '2.2.6dev-curve-to-line-backport'
 
 Interactive shell
 -----------------
