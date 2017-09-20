@@ -17,19 +17,22 @@ RUN add-apt-repository --enable-source ppa:ubuntugis/ppa
 RUN apt-get update && apt-get build-dep -y postgis
 
 #Additional build dependencies
-RUN apt-get install -y devscripts
+RUN apt-get install -y devscripts quilt
 
 #Debian packages sources
 WORKDIR /root/postgis-deb
 RUN apt-get source postgis
 
 #Add patch
-COPY curve-to-line-backport.patch /root/postgis-deb/
-RUN cd postgis-2.2* && mv ../curve-to-line-backport.patch debian/patches/curve-to-line-backport
-RUN cd postgis-2.2* && echo curve-to-line-backport >>debian/patches/series
+COPY curve-to-line-backport.patch liblwgeom-2.2-5.symbols.patch /root/postgis-deb/
+RUN cd postgis-2.2* && mv ../*.patch debian/patches/
+RUN cd postgis-2.2* && quilt pop -a
+RUN cd postgis-2.2* && echo liblwgeom-2.2-5.symbols.patch\\ncurve-to-line-backport.patch\\nlink-liblwgeom\\nrelax-test-timing-constraints.patch >debian/patches/series
+RUN cd postgis-2.2* && quilt push -a -f || true
 RUN cd postgis-2.2* && dch -v 2.3.3+curve-to-line-backport "Build for Trusty with ST_CurveToLine backport"
+RUN mv postgis-2.2.2+dfsg  postgis-2.3.3
 #Build packages
 #Build without tests. They need running PG server.
-RUN cd postgis-2.2* && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -b -uc -us
+RUN cd postgis-2.3* && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -b -uc -us
 
 VOLUME ["/pkg"]

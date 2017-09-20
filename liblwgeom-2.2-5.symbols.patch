@@ -1,0 +1,46 @@
+--- a/debian/liblwgeom-2.2-5.symbols (liblwgeom-2.2-5_2.3.3_amd64)
++++ dpkg-gensymbolsW5pAs6       2017-09-20 12:37:10.256307246 +0000
+@@ -234,7 +234,7 @@
+  lwcircstring_reverse@Base 2.0.0
+  lwcircstring_same@Base 2.0.0
+  lwcircstring_setPoint4d@Base 2.0.0
+- lwcircstring_stroke@Base 2.2.0
++#MISSING: 2.3.3# lwcircstring_stroke@Base 2.2.0
+  lwcollection_add_lwgeom@Base 2.0.0
+  lwcollection_allows_subtype@Base 2.0.0
+  lwcollection_as_lwgeom@Base 2.0.0
+@@ -258,7 +258,7 @@
+  lwcollection_segmentize2d@Base 2.0.0
+  lwcollection_simplify@Base 2.0.0
+  lwcollection_startpoint@Base 2.1.0
+- lwcollection_stroke@Base 2.2.0
++#MISSING: 2.3.3# lwcollection_stroke@Base 2.2.0
+  lwcompound_add_lwgeom@Base 2.0.0
+  lwcompound_as_lwgeom@Base 2.0.0
+  lwcompound_construct_empty@Base 2.0.0
+@@ -271,6 +271,7 @@
+  lwcompound_length@Base 2.0.0
+  lwcompound_length_2d@Base 2.0.0
+  lwcompound_stroke@Base 2.2.0
++ lwcurve_linearize@Base 2.3.3
+  lwcurvepoly_add_ring@Base 2.0.0
+  lwcurvepoly_area@Base 2.0.0
+  lwcurvepoly_as_lwgeom@Base 2.0.0
+@@ -487,7 +488,7 @@
+  lwline_simplify@Base 2.0.0
+  lwline_split_by_point_to@Base 2.0.0
+  lwline_unstroke@Base 2.2.0
+- lwmcurve_stroke@Base 2.2.0
++#MISSING: 2.3.3# lwmcurve_stroke@Base 2.2.0
+  lwmessage_truncate@Base 2.0.0
+  lwmline_add_lwline@Base 2.0.0
+  lwmline_as_lwgeom@Base 2.0.0
+@@ -511,7 +512,7 @@
+  lwmpoly_free@Base 2.0.0
+  lwmpoly_release@Base 2.0.0
+  lwmpolygon_unstroke@Base 2.2.0
+- lwmsurface_stroke@Base 2.2.0
++#MISSING: 2.3.3# lwmsurface_stroke@Base 2.2.0
+  lwnotice@Base 2.0.0
+  lwnotice_var@Base 2.0.0
+  lwpoint_as_lwgeom@Base 2.0.0

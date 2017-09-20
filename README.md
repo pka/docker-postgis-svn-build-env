@@ -6,7 +6,7 @@ ST_CurveToLine
 
 Create patch from https://github.com/strk/postgis/tree/svn-2.2-curve-to-line-extended:
 
-	git diff 512a1d1 >curve-to-line-backport.patch
+	git diff f37bb5d >curve-to-line-backport.patch
 
 Usage
 -----
