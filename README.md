@@ -8,6 +8,9 @@ Create patch from https://github.com/strk/postgis/tree/svn-2.2-curve-to-line-ext
 
 	git diff f37bb5d >curve-to-line-backport.patch
 
+Download patch for https://trac.osgeo.org/postgis/ticket/4031 from https://trac.osgeo.org/postgis/changeset/16553
+
+
 Usage
 -----
 

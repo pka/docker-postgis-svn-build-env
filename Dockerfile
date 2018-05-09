@@ -24,13 +24,13 @@ WORKDIR /root/postgis-deb
 RUN apt-get source postgis
 
 #Add patch
-COPY curve-to-line-backport.patch liblwgeom-2.2-5.symbols.patch /root/postgis-deb/
+COPY *.patch /root/postgis-deb/
 RUN cd postgis-2.2* && mv ../*.patch debian/patches/
 RUN cd postgis-2.2* && quilt pop -a
-RUN cd postgis-2.2* && echo liblwgeom-2.2-5.symbols.patch\\ncurve-to-line-backport.patch\\nlink-liblwgeom\\nrelax-test-timing-constraints.patch >debian/patches/series
+RUN cd postgis-2.2* && echo liblwgeom-2.2-5.symbols.patch\\ncurve-to-line-backport.patch\\nchangeset_16553.patch\\nlink-liblwgeom\\nrelax-test-timing-constraints.patch >debian/patches/series
 RUN cd postgis-2.2* && quilt push -a -f || true
-RUN cd postgis-2.2* && dch -v 2.2.6+curve-to-line-backport "Build for Trusty with ST_CurveToLine backport"
-RUN mv postgis-2.2.2+dfsg  postgis-2.2.6+curve-to-line-backport
+RUN cd postgis-2.2* && dch -v 2.2.6+curve-to-line-backport2 "Build for Trusty with ST_CurveToLine backport"
+RUN mv postgis-2.2.2+dfsg postgis-2.2.6+curve-to-line-backport2
 #Build packages
 #Build without tests. They need running PG server.
 RUN cd postgis-2.2* && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -b -uc -us

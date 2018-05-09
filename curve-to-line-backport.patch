@@ -561,55 +561,6 @@ index e5ef074..1b57a61 100644
  2016-03-20 05:07  Regina Obe <lr@pcorp.us>
  
  	* [r14791] doc/reference_output.xml: fix typo in last commit
-diff --git a/HOWTO_RELEASE b/HOWTO_RELEASE
-index 4967271..ba56875 100644
---- a/HOWTO_RELEASE
-+++ b/HOWTO_RELEASE
-@@ -1,6 +1,6 @@
- How to release
- ~~~~~~~~~~~~~~
--Date: 2015-10-08
-+Date: 2017-01-30
- 
- Versioning Scheme
- -----------------
-@@ -25,7 +25,7 @@ to work or rather *HIGHLY RECOMMENDED* to get new functionalities.
- 
- All POSTGIS_MICRO_VERSION that are in branch or trunk should end in dev.
- So for example if you just release 2.1.1, then the 2.1 branch should have
--POSTGIS_MICRO_VERSION set to 2dev so that the full version is 2.1.2dev.
-+POSTGIS_MICRO_VERSION set to 2dev so that the full version is 2.2.5dev.
- 
- *Liblwgeom*
- 
-@@ -63,8 +63,8 @@ Release procedure
- - Edit README.postgis and set release date and version.
- - Add release notes in doc/release_notes.xml
- - Update Version.config to drop the "dev" suffix
--- Add the "dev" suffixed version in extensions/upgradeable_versions.mk
--  and ensure all the previous released minor versions are listed in it
-+- Ensure all the previous released micro versions are listed in 
-+  in extensions/upgradeable_versions.mk
- - Commit all changes
- - Tag branch:  
-    $ base=http://svn.osgeo.org/postgis/
-@@ -72,6 +72,7 @@ Release procedure
-    $ svn copy -m "Tagged release $rev" $base/branches/2.2 $base/tags/$rev
- - Run: sh make_dist.sh $rev (or use debbie for this)
- - Build and test generated tarball (including extension upgrade)
-+- Update jenkins jobs to latest micro dev.
- - Copy tarball to web site and edit downloads page
- - Announce on e-mail 
-     - postgis-users
-@@ -89,7 +90,7 @@ Release procedure
-        -- http://debbie.postgis.net:8080 (log in)
-        Create new job copy last tag e.g. PostGIS_2.0_tagged_docs to PostGIS_2.1_tagged_docs
-        and make appropriate edits and then just run.
--       Or just be lazy and bug Regina Obe do this.
-+       Or just be lazy and bug Regina Obe to do this.
-     - Freshmeat
-     - Wikipedia
-     - Twitter (we all love twitter don't we)
 diff --git a/NEWS b/NEWS
 index aa2bc98..df92c90 100644
 --- a/NEWS
@@ -4674,30 +4625,6 @@ index 7024958..b0d6262 100644
  linefromencodedpolyline_01|SRID=4326;LINESTRING(-120.2 38.5,-120.95 40.7,-126.453 43.252)
 -linefromencodedpolyline_02|SRID=4326;LINESTRING(-120.23447 38.5,-120.95 40.73435,-126.453 43.252)
 +linefromencodedpolyline_02|SRID=4326;LINESTRING(-120.234 38.5,-120.95 40.734,-126.453 43.252)
-diff --git a/regress/knn_recheck.sql b/regress/knn_recheck.sql
-index a4052b4..c216ead 100644
---- a/regress/knn_recheck.sql
-+++ b/regress/knn_recheck.sql
-@@ -220,3 +220,19 @@ ORDER BY a.gid, true_rn;
- 
- DROP TABLE knn_recheck_geom_nd;
- 
-+-- #3573
-+SELECT '#3573', 'POINT M (0 0 13)'::geometry <<->> 'LINESTRING M (0 0 5, 0 1 6)'::geometry;
-+
-+-- #3418
-+CREATE TABLE test_wo (geo geometry);
-+INSERT INTO test_wo VALUES 
-+  ('0101000020E61000007D91D0967329E4BF6631B1F9B8D64A40'::geometry), 
-+  ('0101000020E6100000E2AFC91AF510C1BFCDCCCCCCCCAC4A40'::geometry);
-+CREATE INDEX ON TEST_WO USING GIST (GEO);
-+analyze test_wo;
-+SET enable_seqscan = false;
-+SELECT '#3418' As ticket, '0101000020E610000092054CE0D6DDE5BFCDCCCCCCCCAC4A40'::geometry <-> geo, ST_Distance('0101000020E610000092054CE0D6DDE5BFCDCCCCCCCCAC4A40'::geometry, geo) 
-+FROM test_wo ORDER BY geo <->
-+('0101000020E610000092054CE0D6DDE5BFCDCCCCCCCCAC4A40'::geometry);
-+DROP TABLE test_wo;
-+set enable_seqscan to default;
 diff --git a/regress/knn_recheck_expected b/regress/knn_recheck_expected
 index ca79418..9c37f23 100644
 --- a/regress/knn_recheck_expected
